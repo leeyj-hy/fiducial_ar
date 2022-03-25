@@ -1,0 +1,5 @@
+<launch>
+
+    <node name = "fiducial_ar" pkg = "fiducial_ar" type = "fiducial_ar" output = "screen"/>
+    
+</launch>
