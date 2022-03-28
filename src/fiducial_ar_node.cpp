@@ -8,6 +8,9 @@
 #include "sensor_msgs/Image.h"
 #include "cv_bridge/cv_bridge.h"
 
+
+#define PI = 3.1416;
+
 using namespace ros;
 using namespace std;
 using namespace cv;
@@ -20,6 +23,7 @@ private:
     ros::Subscriber sub1;
     ros::Subscriber sub2;
 
+
     int trn_x;
     int trn_y;
     int trn_z;
@@ -27,6 +31,12 @@ private:
     int rot_y;
     int rot_z;
     int rot_w;
+
+    int x_cntr;
+    int y_cntr;
+
+    string x_loc;
+    string y_loc;
 
     double x0;
     double y0;
@@ -36,6 +46,16 @@ private:
     double y2;
     double x3;
     double y3;
+
+
+    int x_x;
+    int x_y;
+    int y_x;
+    int y_y;
+    int z_x;
+    int z_y;
+    
+
 
     Mat image = Mat(480, 640, CV_8UC3);
 
@@ -90,8 +110,30 @@ public:
         cv::line(image, Point(this->x2, this->y2), Point(this->x3, this->y3),Scalar(0,0,255), 1, 8, 0);
         cv::line(image, Point(this->x3, this->y3), Point(this->x0, this->y0),Scalar(0,0,255), 1, 8, 0);
         
+
+        x_cntr=(x0+x1+x2+x3)/4;
+        y_cntr=(y0+y1+y2+y3)/4;
+
+        cv::circle(image, Point(x_cntr, y_cntr), 2, Scalar(0,0,255, 125), 3, -1);
+
+        this -> x_x = (this -> x1 + this -> x2)/2;
+        this -> x_y = (this -> y1 + this -> y2)/2;
+        this -> y_x = (this -> x0 + this -> x1)/2;
+        this -> y_y = (this -> y0 + this -> y1)/2;
+        //this -> z_x = ;
+        //this -> z_y = ;
+
+
+        this -> x_loc = to_string(this -> x_cntr);
+        this -> y_loc = to_string(this -> y_cntr);
+        cv::line(image, Point(this -> x_x, this -> x_y), Point(this -> x_cntr, this -> y_cntr), Scalar(0, 0, 255), 1, 8, 0);
+        cv::line(image, Point(this -> y_x, this -> y_y), Point(this -> x_cntr, this -> y_cntr), Scalar(0, 255, 0), 1, 8, 0);
+        //cv::line(image, Point(this -> z_x, this -> z_y), Point(this -> x_cntr, this -> y_cntr), Scalar(255, 0, 0), 1, 8, 0);
+        cv::putText(image, this -> x_loc, Point (10, 10), 1, 1, (0, 255, 0), 2, 8, 0);
+        cv::putText(image, this -> y_loc, Point (10, 30), 1, 1, (0, 255, 0), 2, 8, 0);
         
-        
+        x0 = x1 = x2 = x3 = y0 = y1 = y2 = y3 = 0;
+        x_cntr = y_cntr = 0;
         imshow("img", image);
         waitKey(3);
     }
