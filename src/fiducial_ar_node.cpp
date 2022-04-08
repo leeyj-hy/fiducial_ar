@@ -58,7 +58,7 @@ private:
     double sp1;
     double sp2;
     double fps;
-    
+    string fps_s;
 
 
     Mat image = Mat(480, 640, CV_8UC3);
@@ -134,8 +134,8 @@ public:
         cv::line(image, Point(this -> x_x, this -> x_y), Point(this -> x_cntr, this -> y_cntr), Scalar(0, 0, 255), 1, 8, 0);
         cv::line(image, Point(this -> y_x, this -> y_y), Point(this -> x_cntr, this -> y_cntr), Scalar(0, 255, 0), 1, 8, 0);
         //cv::line(image, Point(this -> z_x, this -> z_y), Point(this -> x_cntr, this -> y_cntr), Scalar(255, 0, 0), 1, 8, 0);
-        cv::putText(image, this -> x_loc, Point (10, 10), 1, 1, (0, 255, 0), 2, 8, 0);
-        cv::putText(image, this -> y_loc, Point (10, 30), 1, 1, (0, 255, 0), 2, 8, 0);
+        cv::putText(image, this -> x_loc, Point (10, 40), 1, 1, (0, 255, 0), 2, 8, 0);
+        cv::putText(image, this -> y_loc, Point (10, 60), 1, 1, (0, 255, 0), 2, 8, 0);
         
         x0 = x1 = x2 = x3 = y0 = y1 = y2 = y3 = 0;
         x_cntr = y_cntr = 0;
@@ -146,10 +146,12 @@ public:
     void show_fps()
     {
         this -> sp1 = this -> sp2;
-        this -> sp2=static_cast<double>(getTickCount());
-        this -> fps=1000/(this -> sp2 - this -> sp1)/getTickFrequency();
-
-        cv::putText(image, this -> fps, Point(0,0), 1, 1, (255, 0, 0), 2, 8, 0);
+        this -> sp2=Time::now().toSec();
+        // this -> fps=1000/(this -> sp2 - this -> sp1)/getTickFrequency();
+        this -> fps= 1/(this -> sp2 - this -> sp1);
+        ROS_INFO("%f", this -> fps);
+        this -> fps_s = to_string(this -> fps);
+        cv::putText(image, this -> fps_s, Point(10,70), 1, 1, (0, 255, 0), 2, 8, 0);
     }
 
 
