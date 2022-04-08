@@ -145,9 +145,9 @@ public:
 
     void show_fps()
     {
-        sp1=sp2;
-        sp2=static_cast<double>(getTickCount());
-        fps=1000/(sp2-sp1)/getTickFrequency();
+        this -> sp1 = this -> sp2;
+        this -> sp2=static_cast<double>(getTickCount());
+        this -> fps=1000/(this -> sp2 - this -> sp1)/getTickFrequency();
 
         cv::putText(image, this -> fps, Point(0,0), 1, 1, (255, 0, 0), 2, 8, 0);
     }
